@@ -40,6 +40,10 @@ export default function Home() {
   }
 
   useEffect(() => {
+    alert(token);
+  }, [token]);
+
+  useEffect(() => {
     const onMessageListener = async () => {
       const messagingResolve = await messaging();
       if (messagingResolve) {
@@ -70,7 +74,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 text-white">
       <div className="flex flex-col gap-10">
         <div className="text-4xl">🔔{permission}🔔</div>
         <button className="border rounded py-2" onClick={requestPermission}>
