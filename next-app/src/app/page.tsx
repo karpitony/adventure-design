@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getMessaging,
   onMessage,
@@ -24,8 +23,6 @@ const messaging = async () => {
 
 export default function Home() {
   const [token, setToken] = useState<string | null>(null);
-  const permission = Notification.permission;
-
   const requestPermission = async () => {
     const messagingResolve = await messaging();
     if (!("Notification" in window)) {
@@ -37,11 +34,17 @@ export default function Home() {
       setToken(token);
       console.log("token", token);
     }
-  }
 
-  useEffect(() => {
-    alert(token);
-  }, [token]);
+    // const permission = Notification.permission;
+    // if (permission === "granted") {
+    //   return;
+    // } else {
+    //   Notification.requestPermission().then((permission) => {
+    //     console.log("permission", permission);
+    //   });
+    //   return;
+    // }
+  };
 
   useEffect(() => {
     const onMessageListener = async () => {
@@ -60,7 +63,7 @@ export default function Home() {
             if (payload.data) {
               const notification = new Notification(title, {
                 body,
-                icon: "/icon.png",
+                icon: "/icons/icon-96.png",
               });
               notification.onclick = () => {
                 window.open(redirectUrl, "_blank")?.focus();
@@ -72,11 +75,13 @@ export default function Home() {
     };
     onMessageListener();
   }, []);
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 text-white">
       <div className="flex flex-col gap-10">
-        <div className="text-4xl">🔔{permission}🔔</div>
+        <div className="text-4xl">
+         {/*🔔{window && "Notification" in window && Notification?.permission}🔔*/}
+        </div>
+        <div className="break-all">{token}</div>
         <button className="border rounded py-2" onClick={requestPermission}>
           푸시 알림 켜기
         </button>

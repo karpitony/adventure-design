@@ -13,7 +13,6 @@ const firebaseConfig = {
   measurementId: "G-V9N1GEXP5Z"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
@@ -21,8 +20,31 @@ messaging.onBackgroundMessage((payload) => {
   const title = payload.notification.title + " (onBackgroundMessage)";
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "/icon.png",
+    icon: "https://avatars.githubusercontent.com/sasha1107",
   };
 
   self.registration.showNotification(title, notificationOptions);
+});
+
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
+
+  const redirectUrl = event?.notification?.data?.redirectUrl;
+
+  event.waitUntil(
+    clients
+      .matchAll({
+        type: "window",
+      })
+      .then(function (clientList) {
+        for (const client of clientList) {
+          if (client.url === redirectUrl && "focus" in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow(redirectUrl);
+        }
+      })
+  );
 });
