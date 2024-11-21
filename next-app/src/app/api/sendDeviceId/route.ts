@@ -1,18 +1,14 @@
-// pages/api/sendToken.js
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { token } = req.body;
-
-  if (!token) {
-    return res.status(400).json({ error: 'Token is required' });
-  }
-
+export const POST = async (req: Request) => {
   try {
+    const body = await req.json();
+    const { token } = body;
+
+    if (!token) {
+      return NextResponse.json({ error: 'Token is required' }, { status: 400 });
+    }
+
     const response = await fetch('https://sawfly-in-quagga.ngrok-free.app/api/store-token', {
       method: 'POST',
       headers: {
@@ -26,9 +22,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
 
     const data = await response.json();
-    return res.status(200).json({ message: 'Token sent successfully', data });
-  } catch (error) {
+    return NextResponse.json({ message: 'Token sent successfully', data });
+  } catch (error: any) {
     console.error('Error sending token:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-}
+};

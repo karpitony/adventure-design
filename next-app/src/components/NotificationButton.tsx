@@ -9,12 +9,12 @@ import {
 } from "firebase/messaging";
 import { firebaseApp } from "@/firebase";
 
-async function sendToken(token:string) {
+async function sendToken(token: string, setStatus: (status: string) => void) {
   try {
-    const response = await fetch('/api/sendToken', {
-      method: 'POST',
+    const response = await fetch("/api/sendToken", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ token }),
     });
@@ -22,12 +22,15 @@ async function sendToken(token:string) {
     const data = await response.json();
 
     if (response.ok) {
-      console.log('Success:', data);
+      console.log("Success:", data);
+      setStatus("success");
     } else {
-      console.error('Error:', data.error);
+      console.error("Error:", data.error);
+      setStatus("error");
     }
   } catch (error) {
-    console.error('Unexpected error:', error);
+    console.error("Unexpected error:", error);
+    setStatus("error");
   }
 }
 
@@ -46,6 +49,8 @@ const messaging = async () => {
 
 export default function Page() {
   const [token, setToken] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null); // 성공 상태 관리
+
   const requestPermission = async () => {
     const messagingResolve = await messaging();
     if (!("Notification" in window)) {
@@ -56,7 +61,7 @@ export default function Page() {
       const token = await getToken(messagingResolve);
       setToken(token);
       console.log("token", token);
-      sendToken(token);
+      sendToken(token, setStatus); // 상태 업데이트를 위한 setStatus 전달
     }
   };
 
@@ -89,16 +94,23 @@ export default function Page() {
     };
     onMessageListener();
   }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 text-white">
       <div className="flex flex-col gap-10">
         <div className="text-4xl">
-         {/*🔔{window && "Notification" in window && Notification?.permission}🔔*/}
+          {/*🔔{window && "Notification" in window && Notification?.permission}🔔*/}
         </div>
         <div className="break-all">{token}</div>
         <button className="border rounded py-2" onClick={requestPermission}>
           푸시 알림 켜기
         </button>
+        {status === "success" && (
+          <div className="text-green-500">✅ 토큰 전송에 성공했습니다!</div>
+        )}
+        {status === "error" && (
+          <div className="text-red-500">❌ 토큰 전송에 실패했습니다!</div>
+        )}
       </div>
     </main>
   );
