@@ -1,5 +1,4 @@
 /node_modules
-/bin
-serviceAccountKey.json
-/dist
 .env
+firebase-service-account.json
+.DS_Store
