@@ -1,3 +1,12 @@
+# 어드벤쳐 디자인
+
+## 실행하기
+```
+cd server
+node src/app.js
+```
+
+## 폴더구조
 ```
 project-root/
 ├── next-app/                  # Next.js 프론트엔드 애플리케이션

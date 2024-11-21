@@ -63,6 +63,7 @@ async function sendNotification(type) {
 
 // `api/up` 라우트
 app.get("/api/up", async (req, res) => {
+  console.log("up");
   try {
     await sendNotification("up");
     res.status(200).json({ message: "Notification for 'up' sent successfully" });
@@ -73,6 +74,7 @@ app.get("/api/up", async (req, res) => {
 
 // `api/down` 라우트
 app.get("/api/down", async (req, res) => {
+  console.log("down");
   try {
     await sendNotification("down");
     res.status(200).json({ message: "Notification for 'down' sent successfully" });
@@ -87,9 +89,12 @@ app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
 
   try {
-    const url = await ngrok.connect({ addr: PORT, authtoken: process.env.NGROK_AUTHTOKEN });
-    console.log(`Ingress established at: ${url}`);
+    const listener = await ngrok.connect({ addr: PORT, authtoken: process.env.NGROK_AUTHTOKEN });
+    const url = listener.url();
+    console.log(`Ingress established at: ${url}`); // URL 출력
   } catch (error) {
     console.error("Error connecting to ngrok:", error);
   }
 });
+
+
