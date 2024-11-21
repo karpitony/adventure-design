@@ -1,6 +1,10 @@
 const express = require("express");
 const admin = require("firebase-admin");
 const ngrok = require("@ngrok/ngrok");
+const dotenv = require("dotenv");
+
+// 환경 변수 로드
+dotenv.config();
 
 // Firebase Admin 초기화
 const serviceAccount = require("./firebase-service-account.json");
@@ -83,7 +87,7 @@ app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
 
   try {
-    const url = await ngrok.connect({ addr: PORT, authtoken_from_env: true });
+    const url = await ngrok.connect({ addr: PORT, authtoken: process.env.NGROK_AUTHTOKEN });
     console.log(`Ingress established at: ${url}`);
   } catch (error) {
     console.error("Error connecting to ngrok:", error);
