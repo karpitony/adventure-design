@@ -20,7 +20,7 @@ messaging.onBackgroundMessage((payload) => {
   const title = payload.notification.title + " (onBackgroundMessage)";
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "https://avatars.githubusercontent.com/sasha1107",
+    icon: "https://raw.githubusercontent.com/karpitony/next-pwa-practice/refs/heads/main/next-app/public/3d-bell-icon.avif",
   };
 
   self.registration.showNotification(title, notificationOptions);
