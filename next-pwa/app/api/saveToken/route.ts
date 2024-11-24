@@ -22,7 +22,7 @@ if (!globalThis.firebaseAdminApp) {
   }
 }
 
-export const db = getFirestore(globalThis.firebaseAdminApp);
+const db = getFirestore(globalThis.firebaseAdminApp);
 
 export async function POST(req: NextRequest) {
   try {
