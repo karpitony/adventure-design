@@ -2,15 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
-// Firebase Admin 초기화
 if (!globalThis.firebaseAdminApp) {
-  const serviceAccount = require("@/config/firebase-service-account.json");
-  globalThis.firebaseAdminApp = initializeApp({
-    credential: cert(serviceAccount),
-  });
+  const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
+
+  if (!serviceAccountString) {
+    throw new Error("FIREBASE_SERVICE_ACCOUNT 환경 변수가 설정되지 않았습니다.");
+  }
+
+  try {
+    // 환경 변수에서 JSON 문자열 파싱
+    const serviceAccount = JSON.parse(serviceAccountString);
+
+    globalThis.firebaseAdminApp = initializeApp({
+      credential: cert(serviceAccount),
+    });
+  } catch (error) {
+    console.error("Firebase 서비스 계정 JSON 처리 중 오류:", error);
+    throw new Error("Firebase 서비스 계정 JSON 처리 실패");
+  }
 }
 
-const db = getFirestore(globalThis.firebaseAdminApp);
+export const db = getFirestore(globalThis.firebaseAdminApp);
 
 export async function POST(req: NextRequest) {
   try {
