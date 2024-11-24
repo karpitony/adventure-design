@@ -1,22 +1,12 @@
 'use client';
 import Image from "next/image";
-import Notification from "@/components/Notification";
+import dynamic from "next/dynamic";
 
-const registerSw = async () => {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-      .register('/firebase-messaging-sw.js')
-      .then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch((err) => {
-        console.error('Service Worker registration failed:', err);
-      });
-  }
-}
+const Notification = dynamic(() => import("@/components/Notification"), {
+  ssr: false, // 서버에서 렌더링하지 않음
+});
 
 export default function Home() {
-  registerSw();
   return (
     <div className="text-white">
       <h1>Home</h1>

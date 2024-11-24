@@ -2,10 +2,13 @@
 import { useState } from 'react';
 import { messaging } from '@/config/Firebase';
 import { getToken } from "firebase/messaging";
+import { registerServiceWorker } from '@/libs/ServiceWorker';
 
 export default function Notification() {
   const [token, setToken] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
+
+  registerServiceWorker();
 
   const saveTokenToDatabase = async (token: string) => {
     try {
