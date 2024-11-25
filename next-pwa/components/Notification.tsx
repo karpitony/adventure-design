@@ -79,12 +79,7 @@ export default function Notification() {
   };
 
   return (
-    <div
-      className={cn(
-        'flex items-center p-3 border-2 border-gray-500 rounded-lg', 
-        'bg-white bg-opacity-15 w-full'
-      )}
-    >
+    <>
       <div className='text-6xl m-2'>
       {permission === 'granted' ? (
         <FaBell className='text-blue-500' />
@@ -92,7 +87,7 @@ export default function Notification() {
         <FaBellSlash className='text-red-500' />
       )}
       </div>
-      <div className='ml-4'>
+      <div className='ml-4 sm:ml-6'>
         <h1 className='text-2xl font-bold mb-2'>알림 설정</h1>
         {permission === 'granted' ? (
           <p className='text-green-500 font-semibold'>알림이 활성화되어 있습니다.</p>
@@ -100,8 +95,8 @@ export default function Notification() {
           <button 
             onClick={requestNotificationPermission}
             className={cn(
-              'flex items-center rounded bg-blue-500 hover:bg-blue-600', 
-              'text-white transition px-4 py-2'
+              'flex items-center rounded bg-blue-600 hover:bg-blue-700', 
+              'text-white transition duration-200 px-4 py-2 font-semibold'
             )}
           >
             클릭해서 알림 허용
@@ -109,6 +104,6 @@ export default function Notification() {
         )}
         {message && <p className='mt-2 text-sm text-gray-200'>{message}</p>}
       </div>
-    </div>
+    </>
   );
 }
