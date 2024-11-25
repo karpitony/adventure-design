@@ -13,7 +13,7 @@ async function getDeviceTokens() {
 
     snapshot.forEach((doc) => {
       tokens.push(doc.id);
-      console.log('Token (from doc.id):', doc.id);
+      // console.log('Token (from doc.id):', doc.id);
     });
   } catch (error) {
     console.error('Error fetching device tokens:', error);
@@ -29,8 +29,10 @@ async function sendNotification(message) {
     return;
   }
 
-  try {
-    for (const token of tokens) {
+  let successCount = 0;
+
+  for (const token of tokens) {
+    try {
       await admin.messaging().send({
         token: token,
         notification: {
@@ -39,23 +41,26 @@ async function sendNotification(message) {
         },
       });
       console.log(`Successfully sent notification to ${token}`);
+      successCount++;
+    } catch (error) {
+      console.error(`Failed to send notification to ${token}:`, error.message);
     }
-    console.log('All notifications sent successfully.');
-  } catch (error) {
-    console.error('Error sending notification:', error);
   }
+
+  // 성공/실패 요약 출력
+  console.log(`Notifications Summary: ${successCount} of ${tokens.length} succeeded.`);
 }
 
 // /notifications/up 엔드포인트
 router.post('/up', async (req, res) => {
   await sendNotification('차수판이 올라갔습니다.');
-  res.status(200).send('Notification sent for up.');
+  res.status(200).send('sucess');
 });
 
 // /notifications/down 엔드포인트
 router.post('/down', async (req, res) => {
   await sendNotification('차수판이 내려갔습니다.');
-  res.status(200).send('Notification sent for down.');
+  res.status(200).send('sucess');
 });
 
 module.exports = router;

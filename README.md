@@ -2,8 +2,8 @@
 
 ## 실행하기
 ```
-cd server
-node src/app.js
+docker build -t node-server .
+docker run --rm -it -p 8080:8080 node-server
 ```
 
 ## 폴더구조
