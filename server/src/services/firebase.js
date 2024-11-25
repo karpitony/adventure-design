@@ -1,13 +1,18 @@
 const admin = require("firebase-admin");
+const path = require('path');
 
 // Firebase 초기화
-const serviceAccount = require("../../firebase-service-account.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: "adventure-design-4t.firebasestorage.app",
-});
+const serviceAccount = require(path.join(__dirname, "../../firebase-service-account.json"));
+
+if (admin.apps.length === 0) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  console.log('Connect FCM: Initialize FCM SDK');
+} else {
+  console.log('Connect FCM');
+}
 
 const db = admin.firestore();
-const bucket = admin.storage().bucket();
 
-module.exports = { admin, db, bucket };
+module.exports = { admin, db };
