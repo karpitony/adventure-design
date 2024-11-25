@@ -80,14 +80,14 @@ export default function Notification() {
 
   return (
     <>
-      <div className='text-6xl m-2'>
+      <div className='text-7xl m-2'>
       {permission === 'granted' ? (
         <FaBell className='text-blue-500' />
       ) : (
         <FaBellSlash className='text-red-500' />
       )}
       </div>
-      <div className='ml-4 sm:ml-6'>
+      <div className='ml-2 sm:ml-4'>
         <h1 className='text-2xl font-bold mb-2'>알림 설정</h1>
         {permission === 'granted' ? (
           <p className='text-green-500 font-semibold'>알림이 활성화되어 있습니다.</p>
