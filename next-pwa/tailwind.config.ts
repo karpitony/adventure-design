@@ -8,6 +8,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        GeekbleMalang: ["GeekbleMalang2WOFF2", "sans-serif"],
+        cookierun: ['CookieRun', 'sans-serif'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

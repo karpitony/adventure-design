@@ -25,10 +25,10 @@ export default function Home() {
 
   return (
     <div className="w-full text-white">
-      <h3 className="mt-12 text-base md:text-lg leading-none font-bold tracking-tight text-purple-200">
-        <span className="text-[gold] opacity-75">어드벤쳐 디자인 1분반</span> @4T조
+      <h3 className="mt-12 text-base md:text-lg leading-none tracking-tight text-purple-200 font-bold font-cookierun">
+        <span className="text-[gold] opacity-75">어드벤쳐 디자인 1분반</span> @ 4T조
       </h3>
-      <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 md:mb-12 text-purple-400">
+      <h1 className="text-4xl md:text-5xl tracking-tight mb-6 md:mb-12 text-purple-400 font-bold font-cookierun">
         스마트 차수판 웹앱
       </h1> 
       <div className="flex flex-col gap-6">

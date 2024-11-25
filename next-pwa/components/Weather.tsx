@@ -77,7 +77,7 @@ export default function Weather() {
 
   return (
     <>
-      <div className="text-7xl m-2">
+      <div className="text-6xl m-2">
         <WeatherIcon />
       </div>
       <div className='ml-2 sm:ml-4'>
