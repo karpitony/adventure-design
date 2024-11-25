@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { weatherIconMap } from '@/config/WeatherIcons';
-import { TiWeatherPartlySunny } from "react-icons/ti";
 import { MainCardLoading } from './common/MainCard';
 
 interface WeatherData {
@@ -11,10 +10,15 @@ interface WeatherData {
   main: { temp: number };
 }
 
+interface WeatherError {
+  error: string;
+}
+
+type WeatherApiResponse = WeatherData | WeatherError;
+
 export default function Weather() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string>('');
-  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -28,17 +32,31 @@ export default function Weather() {
   const onGeoSuccess = (position: GeolocationPosition) => {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=kr`;
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((data: WeatherData) => {
+    fetch('/api/weather', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ lat, lon }),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data: WeatherApiResponse) => {
+      if ('error' in data) {
+        setError(data.error);
+      } else {
         setWeatherData(data);
-      })
-      .catch((err) => {
-        console.error('날씨 정보를 가져오는 중 오류 발생:', err);
-        setError('날씨 정보를 가져오는 중 오류가 발생했습니다.');
-      });
+      }
+    })
+    .catch((err) => {
+      console.error('날씨 정보를 가져오는 중 오류 발생:', err);
+      setError('날씨 정보를 가져오는 중 오류가 발생했습니다.');
+    });
   };
 
   const onGeoError = () => {
