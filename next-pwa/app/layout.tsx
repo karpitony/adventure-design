@@ -32,7 +32,7 @@ export default function RootLayout({
           'w-full h-full flex justify-center'
         )}
       >
-        <main className='w-full max-w-3xl'>
+        <main className='w-full max-w-lg'>
           {children}
         </main>
       </body>
