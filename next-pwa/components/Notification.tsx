@@ -80,7 +80,7 @@ export default function Notification() {
 
   return (
     <>
-      <div className='text-7xl m-2'>
+      <div className='text-6xl m-2'>
       {permission === 'granted' ? (
         <FaBell className='text-blue-500' />
       ) : (

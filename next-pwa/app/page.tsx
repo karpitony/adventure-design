@@ -25,13 +25,13 @@ export default function Home() {
 
   return (
     <div className="w-full text-white">
-      <h3 className="mt-4 text-base min-[372px]:text-lg sm:text-xl leading-none font-bold tracking-tight text-purple-200">
+      <h3 className="mt-12 text-base md:text-lg leading-none font-bold tracking-tight text-purple-200">
         <span className="text-[gold] opacity-75">어드벤쳐 디자인 1분반</span> @4T조
       </h3>
-      <h1 className="text-4xl min-[372px]:text-5xl sm:text-6xl font-extrabold tracking-tight mb-4 sm:mb-6 text-purple-400">
+      <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 md:mb-12 text-purple-400">
         스마트 차수판 웹앱
       </h1> 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <div className="flex flex-row gap-4">
           <LinkCard
             icon={<TbBrandYoutubeKids className="text-red-500" />}

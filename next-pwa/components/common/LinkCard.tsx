@@ -11,15 +11,15 @@ export default function LinkCard({ icon, title, url }: LinkCardProps) {
     <div
       onClick={() => window.open(url, '_blank')}
       className={cn(
-        'flex items-center justify-center w-full p-2', 
-        'border-2 border-gray-500 rounded-lg cursor-pointer ',
-        'bg-white bg-opacity-15 transition duration-200 hover:bg-opacity-25'
+        'flex items-center justify-center w-full p-2',
+        'border-2 border-gray-500 rounded-lg cursor-pointer',
+        'bg-white bg-opacity-10 transition duration-200 hover:bg-opacity-20'
       )}
     >
       <div className='text-3xl mr-4'>
         {icon}
       </div>
-      <h1 className='text-xl font-bold'>
+      <h1 className='text-base min-[372px]:text-lg md:text-xl font-bold'>
         {title}
       </h1>
     </div>
