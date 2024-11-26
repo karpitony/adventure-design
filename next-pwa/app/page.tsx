@@ -23,6 +23,8 @@ export default function Home() {
 
   const Notification = NotificationComponent;
 
+
+  // layout.tsx 상단에서 cookierun 폰트 정의중, 맘에 안들면 거기서 바꾸기
   return (
     <div className="w-full text-white">
       <h3 className="mt-12 text-base md:text-lg leading-none tracking-tight text-purple-200 font-bold font-cookierun">
