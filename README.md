@@ -1,42 +1,93 @@
 # 어드벤쳐 디자인
 
+### 목차
+- [프로젝트 소개](#프로젝트-소개)
+- [기술스택과 아키텍쳐](#기술스택과-아키텍쳐)
+- [실행하기](#실행하기)
+   - [도커로 실행](#도커로-실행)
+   - [Node.js로 실행](#nodejs로-실행)
+- [폴더 구조](#폴더-구조)
+
+## 프로젝트 소개
+TBD
+
+## 기술스택과 아키텍쳐
+TBD
+
 ## 실행하기
-```
+
+### 도커로 실행
+```sh
+git clone https://github.com/karpitony/adventure-design.git
+cd server
+
 docker build -t node-server .
 docker run --rm -it -p 8080:8080 node-server
 ```
 
-## 폴더구조
-```
-project-root/
-├── next-app/                  # Next.js 프론트엔드 애플리케이션
-│   ├── app/                   # Next.js App Router
-│   │   ├── api/               # Next.js API 라우트
-│   │   │   └── registerDevice/
-│   │   │       └── route.ts   # 디바이스 토큰 전달 API
-│   │   └── page.tsx           # 메인 페이지 (디바이스 토큰 생성 및 상태 표시)
-│   ├── config/                # Firebase 클라이언트 설정
-│   │   └── firebaseConfig.ts  # Firebase 클라이언트 초기화
-│   ├── public/                # 정적 파일
-│   │   ├── firebase-messaging-sw.js # Firebase 푸시 알림 서비스 워커
-│   │   ├── icon.png           # PWA 아이콘
-│   │   └── manifest.json      # PWA 매니페스트 파일
-│   ├── styles/                # 전역 CSS 스타일
-│   │   └── globals.css        # Tailwind CSS 기본 설정
-│   ├── .env                   # 환경 변수 파일
-│   ├── next.config.ts         # Next.js 설정 파일
-│   ├── package.json           # Next.js 의존성 관리
-│   ├── tsconfig.json          # TypeScript 설정
-│   └── README.md              # 프로젝트 설명
-├── server/                    # Express 서버
-│   ├── src/                   # 서버 소스 코드
-│   │   ├── app.ts             # Express 앱 초기화
-│   │   ├── routes/            # 서버 라우트
-│   │   │   └── devices.ts     # 디바이스 토큰 관리 및 푸시 알림 전송
-│   │   ├── firebase/          # Firebase 서버 설정
-│   │   │   └── admin.ts       # Firebase Admin SDK 초기화
-│   └── package.json           # Express 의존성 관리
-├── .gitignore                 # Git 제외 파일 설정
-└── README.md                  # 프로젝트 설명
+### Node.js로 실행
+```sh
+git clone https://github.com/karpitony/adventure-design.git
+cd server
 
+npm install -g localtunnel
+lt --port 8080 --subdomain adventure-design-a1234
+```
+
+## 폴더 구조
+```
+adventure-design/
+├─ next-pwa/                     # Next.js PWA 폴더
+│  ├─ .env.example
+│  ├─ .env.local                 # 환경변수 저장 파일
+│  ├─ .gitignore
+│  ├─ README.md
+│  ├─ app/                       # Next.js App 라우터
+│  │  ├─ api/                    # Next.js api 함수 폴더
+│  │  │  ├─ saveToken/           # 디바이스 토큰 API 폴더
+│  │  │  │  ├─ global.d.ts
+│  │  │  │  └─ route.ts          # 디바이스 토큰 전달 API 
+│  │  │  └─ weather/             # 날씨 API 폴더
+│  │  │     └─ route.ts          # 날씨 정보 요청 API
+│  │  ├─ favicon.ico
+│  │  ├─ globals.css             # 전역 스타일 시트
+│  │  ├─ layout.tsx              # 루트 레이아웃 파일
+│  │  ├─ manifest.ts             # PWA를 위한 mainfest.json 생성 파일
+│  │  └─ page.tsx                # 메인 페이지
+│  ├─ components/                # Next.js 컴포넌트 폴더
+│  │  ├─ Notification.tsx        # 알림 권한 허용 + 토큰 전송 컴포넌트
+│  │  ├─ Weather.tsx             # 위치 정보 허용 + 날씨 정보 로딩 컴포넌트
+│  │  └─ common/                 # 공통 컴포넌트 저장 폴더
+│  │     ├─ LinkCard.tsx         # 링크 담은 버튼 카드 컴포넌트
+│  │     └─ MainCard.tsx         # 메인 내용을 담은 카드 컴포넌트
+│  ├─ config/
+│  │  ├─ Firebase.ts             # Firebase 초기화 + 정보 불러오는 config 파일
+│  │  ├─ WeatherIcons.ts         # 날씨에 따라 아이콘 바꾸는 파일
+│  │  ├─ firebase-service-account-example.json
+│  │  └─ firebase-service-account.json    # 파이어베이스 계정 정보 json (gitignored)
+│  ├─ libs/
+│  │  └─ ServiceWorker.ts        # 서비스워커 등록 로직
+│  ├─ next-env.d.ts
+│  ├─ next.config.ts
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ postcss.config.mjs
+│  ├─ public/
+│  │  ├─ 3d-bell-icon.avif
+│  │  ├─ firebase-messaging-sw.js   # 파이어베이스 클라우드 메세지 수신을 위한 서비스워커
+│  │  └─ fonts/
+│  ├─ tailwind.config.ts
+│  └─ tsconfig.json
+└─ server/                       # nodejs 서버 겸 아두이노 미들 웨어
+   ├─ .gitignore
+   ├─ Dockerfile
+   ├─ firebase-service-account.json
+   ├─ package-lock.json
+   ├─ package.json
+   └─ src/                       # 서버 소스 코드
+      ├─ app.js                  # 메인 코드
+      ├─ routes/                 # 라우팅 로직 저장 폴더
+      │  └─ notifications.js     # 알림 발신 라우팅 코드
+      └─ services/
+         └─ firebase.js          # 파이어베이스 Admin SDK 초기화
 ```
