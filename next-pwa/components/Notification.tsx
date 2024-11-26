@@ -2,14 +2,14 @@
 import { useState, useEffect } from 'react';
 import { FaBell, FaBellSlash } from "react-icons/fa6";
 import cn from '@yeahx4/cn';
-import { messaging } from '@/config/Firebase';
-import { getToken } from "firebase/messaging";
 import { registerServiceWorker } from '@/libs/ServiceWorker';
+import getFcmToken from '@/libs/GetFcmToken';
 
 export default function Notification() {
   const [token, setToken] = useState<string | null>(null);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState("");
   const [permission, setPermission] = useState<NotificationPermission>('default');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -43,39 +43,19 @@ export default function Notification() {
     }
   };
 
-  const requestNotificationPermission = () => {
-    if (typeof window !== 'undefined' && 'Notification' in window) {
-      window.Notification.requestPermission().then((permission) => {
-        setPermission(permission);
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-          getToken(messaging, { 
-            vapidKey: 'BHKxrpsR_kM0oNfZlaZh2SDWXkRhNtIac_hhDop8a5ukXVZcBbSmHl-nfZMYr6mFCMj1nVT2FkbkkqgtXbZxqBQ'
-          })
-            .then((currentToken) => {
-              if (currentToken) {
-                console.log('Token:', currentToken);
-                setToken(currentToken);
-                saveTokenToDatabase(currentToken);
-                setMessage("알림이 활성화되었습니다.");
-              } else {
-                console.log('No registration token available.');
-                setMessage("등록 토큰이 없습니다.");
-              }
-            })
-            .catch((err) => {
-              console.error('An error occurred while retrieving token.', err);
-              setMessage("토큰 가져오기 오류");
-            });
-        } else {
-          console.log('Permission denied.');
-          setMessage("알림 권한이 거부되었습니다.");
-        }
-      });
-    } else {
-      console.warn('This browser does not support notifications.');
-      setMessage("이 브라우저는 알림을 지원하지 않습니다.");
+  const handleRequestPermission = async () => {
+    setLoading(true);
+    const { token: currentToken, message, permission } = await getFcmToken();
+
+    setPermission(permission);
+    setMessage(message);
+
+    if (currentToken) {
+      setToken(currentToken);
+      await saveTokenToDatabase(currentToken);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -93,13 +73,14 @@ export default function Notification() {
           <p className='text-green-500 font-semibold'>알림이 활성화되어 있습니다.</p>
         ) : (
           <button 
-            onClick={requestNotificationPermission}
+            onClick={handleRequestPermission}
+            disabled={loading}
             className={cn(
               'flex items-center rounded bg-blue-600 hover:bg-blue-700', 
               'text-white transition duration-200 px-4 py-2 font-semibold'
             )}
           >
-            클릭해서 알림 허용
+              {loading ? '로딩 중...' : '클릭해서 알림 허용'}
           </button>
         )}
         {message && <p className='mt-2 text-sm text-gray-200'>{message}</p>}
