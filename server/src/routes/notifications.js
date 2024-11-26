@@ -1,5 +1,3 @@
-// src/routes/notifications.js
-
 const express = require('express');
 const router = express.Router();
 const { admin, db } = require('../services/firebase');
@@ -9,14 +7,20 @@ async function getDeviceTokens() {
   const tokens = [];
   try {
     const snapshot = await db.collection('deviceTokens').get();
-    console.log('Number of device documents:', snapshot.size);
+
+    if (snapshot.empty) {
+      console.warn('No device tokens found in Firestore.');
+      return tokens;
+    }
+
+    console.log(`Fetched ${snapshot.size} device tokens.`);
 
     snapshot.forEach((doc) => {
       tokens.push(doc.id);
-      // console.log('Token (from doc.id):', doc.id);
     });
   } catch (error) {
-    console.error('Error fetching device tokens:', error);
+    console.error('Error while fetching device tokens:', error.message);
+    throw new Error('Could not fetch device tokens from Firestore.');
   }
   return tokens;
 }
