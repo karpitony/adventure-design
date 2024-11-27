@@ -57,13 +57,21 @@ export default function ArduinoControl() {
   };
 
   const handleArduinoUp = async () => {
+    setLoading(true); // 로딩 시작
     const result = await sendArduinoUp();
-    if (result) setStatus(result);
+    // setTimeout(refreshArduinoStatus, 1000); // 1초 후 상태 갱신
+    // const newStatus = await fetchArduinoStatus(); // 상태 갱신
+    setStatus(result); // 응답에 따라 상태 업데이트
+    setLoading(false); // 로딩 종료
   };
 
   const handleArduinoDown = async () => {
+    setLoading(true); // 로딩 시작
     const result = await sendArduinoDown();
-    if (result) setStatus(result);
+    // setTimeout(refreshArduinoStatus, 1000); // 1초 후 상태 갱신
+    // const newStatus = await fetchArduinoStatus(); // 상태 갱신
+    setStatus(result); // 응답에 따라 상태 업데이트
+    setLoading(false); // 로딩 종료
   };
 
   return (

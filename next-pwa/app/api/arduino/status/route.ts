@@ -9,7 +9,9 @@ interface ArduinoStatusResponse {
 
 export async function GET() {
   try {
-    const response = await fetch(URL);
+    const response = await fetch(URL, {
+      method: "GET",
+    });
     const data: ArduinoStatusResponse = await response.json();
 
     if (!response.ok || data.status === "error") {
