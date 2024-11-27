@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import LinkCard from "@/components/common/LinkCard";
 import MainCard, { MainCardLoading } from "@/components/common/MainCard";
 import Weather from "@/components/Weather";
+import ArduinoControl from "@/components/ArduinoControl";
 import { TbBrandYoutubeKids, TbBrandGithub } from "react-icons/tb";
 
 const Notification = dynamic(() => import("@/components/Notification"), {
@@ -58,6 +59,7 @@ export default function Home() {
         <MainCard>
           <Weather />
         </MainCard>
+        <ArduinoControl />
       </div>
     </div>
   );

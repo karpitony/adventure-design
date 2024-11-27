@@ -81,11 +81,11 @@ export default function Weather() {
         <WeatherIcon />
       </div>
       <div className='ml-2 sm:ml-4'>
-        <h2 className="text-2xl font-bold mb-2">현재 위치의 날씨</h2>
-        <p className="text-xl">
+        <h2 className="text-xl font-bold mb-2">현재 위치의 날씨</h2>
+        <p className="text-base sm:text-lg">
           위치: {weatherData.name}
         </p>
-        <p className="text-xl">
+        <p className="text-base sm:text-lg">
           날씨: {weatherData.weather[0].main} / 온도: {weatherData.main.temp}°C
         </p>
       </div>
