@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import LinkCard from "@/components/common/LinkCard";
 import MainCard, { MainCardLoading } from "@/components/common/MainCard";
 import Weather from "@/components/Weather";
+import ArduinoControl from "@/components/ArduinoControl";
 import { TbBrandYoutubeKids, TbBrandGithub } from "react-icons/tb";
 
 const Notification = dynamic(() => import("@/components/Notification"), {
@@ -39,7 +40,7 @@ export default function Home() {
       <h1 className="text-4xl md:text-5xl tracking-tight mb-6 md:mb-12 text-purple-400 font-bold font-cookierun">
         스마트 차수판 웹앱
       </h1> 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-row gap-4">
           <LinkCard
             icon={<TbBrandYoutubeKids className="text-red-500" />}
@@ -58,6 +59,7 @@ export default function Home() {
         <MainCard>
           <Weather />
         </MainCard>
+        <ArduinoControl />
       </div>
     </div>
   );

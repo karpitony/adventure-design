@@ -3,7 +3,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 
 export default function MainCard({children}: Readonly<{children: React.ReactNode;}>) {
   return (
-    <div className='flex items-center p-3  rounded-lg bg-white bg-opacity-10 w-full'>
+    <div className='flex items-center p-3 rounded-lg bg-white bg-opacity-10 w-full'>
       {children}
     </div>
   );
