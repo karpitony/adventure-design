@@ -1,32 +1,48 @@
 const express = require('express');
 const router = express.Router();
-const { sendDataToArduino, getArduinoStatus } = require('../services/serial');
+const { sendDataToArduino, getArduinoStatus, isArduinoConnected } = require('../services/serial');
+
+// 아두이노 연결 상태 체크 함수
+const checkArduinoConnection = (res) => {
+  if (!isArduinoConnected()) {
+    res.status(503).json({
+      status: "error",
+      message: "Arduino is not connected."
+    });
+    return false;
+  }
+  return true;
+};
 
 // 아두이노 상태 확인 엔드포인트
 router.get('/status', async (req, res) => {
+  if (!checkArduinoConnection(res)) return;
+
   try {
     const status = await getArduinoStatus();
     if (status === 'UP' || status === 'DOWN') {
       res.status(200).json({
         status: "success",
-        message: `Arduino is currently ${status}.`
+        message: status // UP or DOWN
       });
     } else {
       res.status(500).json({
         status: "error",
-        error: 'Unexpected response from Arduino.'
+        message: 'Unexpected response from Arduino.'
       });
     }
   } catch (err) {
     res.status(500).json({
       status: "error",
-      error: 'Error retrieving Arduino status: ' + err.message
+      message: 'Error retrieving Arduino status: ' + err.message
     });
   }
 });
 
 // 아두이노 UP 엔드포인트
 router.post('/up', async (req, res) => {
+  if (!checkArduinoConnection(res)) return;
+
   try {
     const currentStatus = await getArduinoStatus();
 
@@ -59,13 +75,15 @@ router.post('/up', async (req, res) => {
   } catch (err) {
     res.status(500).json({
       status: "error",
-      error: 'Error processing UP command: ' + err.message
+      message: 'Error processing UP command: ' + err.message
     });
   }
 });
 
 // 아두이노 DOWN 엔드포인트
 router.post('/down', async (req, res) => {
+  if (!checkArduinoConnection(res)) return;
+
   try {
     const currentStatus = await getArduinoStatus();
 
@@ -98,7 +116,7 @@ router.post('/down', async (req, res) => {
   } catch (err) {
     res.status(500).json({
       status: "error",
-      error: 'Error processing DOWN command: ' + err.message
+      message: 'Error processing DOWN command: ' + err.message
     });
   }
 });

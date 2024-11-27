@@ -44,6 +44,11 @@ const connectArduino = () => {
     });
 };
 
+// 아두이노 연결 상태 확인
+const isArduinoConnected = () => {
+  return port !== null; // 포트 객체가 초기화된 상태인지 확인
+};
+
 // 데이터 수신 처리
 const startReceivingData = () => {
   if (!port) return;
@@ -113,6 +118,7 @@ const getArduinoStatus = () => {
 };
 
 module.exports = { 
+  isArduinoConnected,
   connectArduino, 
   sendDataToArduino, 
   startReceivingData, 
