@@ -40,7 +40,7 @@ export default function Home() {
       <h1 className="text-4xl md:text-5xl tracking-tight mb-6 md:mb-12 text-purple-400 font-bold font-cookierun">
         스마트 차수판 웹앱
       </h1> 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-row gap-4">
           <LinkCard
             icon={<TbBrandYoutubeKids className="text-red-500" />}

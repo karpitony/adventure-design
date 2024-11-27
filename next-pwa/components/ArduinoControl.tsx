@@ -77,6 +77,9 @@ const ArduinoControl = () => {
     try {
       const result = await sendArduinoUp();
       setStatus(result);
+      if (!result) {
+        throw new Error("Failed to send UP command");
+      }
       showToast("명령 성공", "차수판이 올라갔습니다.", "success");
     } catch (error: any) {
       showToast("에러 발생", "차수판을 올리는 명령에 실패했습니다.", "error");
@@ -90,6 +93,9 @@ const ArduinoControl = () => {
     try {
       const result = await sendArduinoDown();
       setStatus(result);
+      if (!result) {
+        throw new Error("Failed to send UP command");
+      }
       showToast("명령 성공", "차수판이 내려갔습니다.", "success");
     } catch (error: any) {
       showToast("에러 발생", "차수판을 내리는 명령에 실패했습니다.", "error");
