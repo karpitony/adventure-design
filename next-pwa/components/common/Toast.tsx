@@ -7,9 +7,11 @@ interface ToastProps {
   title: string;
   body?: string;
   type: "success" | "error" | "warning" | "info";
+  duration?: number; // 토스트가 자동으로 사라지는 시간 (ms 단위)
+  onClose?: () => void; // 토스트가 사라질 때 호출되는 콜백
 }
 
-export default function Toast({ title, body, type }: ToastProps) {
+export default function Toast({ title, body, type, duration = 6000, onClose }: ToastProps) {
   const [visible, setVisible] = useState(true);
   const [animate, setAnimate] = useState(false);
 
@@ -31,15 +33,16 @@ export default function Toast({ title, body, type }: ToastProps) {
   useEffect(() => {
     setAnimate(true);
 
-    const timer = setTimeout(() => {
+    const hideTimer = setTimeout(() => {
       setAnimate(false);
       setTimeout(() => {
         setVisible(false);
-      }, 500);
-    }, 10000); // 10초 후에 자동으로 사라짐
+        if (onClose) onClose();
+      }, 500); // 사라지는 애니메이션 시간
+    }, duration);
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(hideTimer);
+  }, [duration, onClose]);
 
   if (!visible) return null;
 
@@ -47,7 +50,8 @@ export default function Toast({ title, body, type }: ToastProps) {
     <div
       className={cn(
         'fixed top-4 right-4 p-4 rounded-lg text-white shadow-lg transition-opacity duration-500',
-        getTypeClass(), animate ? 'opacity-100' : 'opacity-0',
+        getTypeClass(),
+        animate ? 'opacity-100' : 'opacity-0',
         'w-56 z-10'
       )}
     >
