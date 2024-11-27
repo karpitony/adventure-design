@@ -52,7 +52,7 @@ export default function Toast({ title, body, type, duration = 6000, onClose }: T
         'fixed top-4 right-4 p-4 rounded-lg text-white shadow-lg transition-opacity duration-500',
         getTypeClass(),
         animate ? 'opacity-100' : 'opacity-0',
-        'w-56 z-10'
+        'w-72 z-10'
       )}
     >
       <div className="flex justify-between items-start">
