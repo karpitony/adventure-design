@@ -6,10 +6,11 @@ import { registerServiceWorker } from '@/libs/ServiceWorker';
 import getFcmToken from '@/libs/GetFcmToken';
 
 export default function Notification() {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null | undefined>(null);
   const [message, setMessage] = useState("");
   const [permission, setPermission] = useState<NotificationPermission>('default');
   const [loading, setLoading] = useState(false);
+  const [showToken, setShowToken] = useState(false); // 토큰을 보일지 말지 상태
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -19,6 +20,11 @@ export default function Notification() {
       setMessage("이 브라우저는 알림을 지원하지 않습니다.");
     }
     registerServiceWorker();
+    getFcmToken().then(({ token, message, permission }) => {
+      setToken(token);
+      // setMessage(message);
+      setPermission(permission);
+    });
   }, []);
 
   const saveTokenToDatabase = async (token: string) => {
@@ -58,14 +64,18 @@ export default function Notification() {
     setLoading(false);
   };
 
+  const toggleTokenVisibility = () => {
+    setShowToken((prev) => !prev); // 토큰 보이기/숨기기
+  };
+
   return (
     <>
       <div className='text-6xl m-2'>
-      {permission === 'granted' ? (
-        <FaBell className='text-blue-500' />
-      ) : (
-        <FaBellSlash className='text-red-500' />
-      )}
+        {permission === 'granted' ? (
+          <FaBell className='text-blue-500' />
+        ) : (
+          <FaBellSlash className='text-red-500' />
+        )}
       </div>
       <div className='ml-2 sm:ml-4'>
         <h1 className='text-2xl font-bold mb-2'>알림 설정</h1>
@@ -80,10 +90,26 @@ export default function Notification() {
               'text-white transition duration-200 px-4 py-2 font-semibold'
             )}
           >
-              {loading ? '로딩 중...' : '클릭해서 알림 허용'}
+            {loading ? '로딩 중...' : '클릭해서 알림 허용'}
           </button>
         )}
         {message && <p className='mt-2 text-sm text-gray-200'>{message}</p>}
+
+        {/* 토큰 보기 버튼 추가 */}
+        <div className='mt-1'>
+          <button
+            onClick={toggleTokenVisibility}
+            className='text-sm text-gray-500 hover:text-gray-700'
+          >
+            {showToken ? '토큰 숨기기' : '토큰 보기'}
+          </button>
+          {/* 토큰 보이기 */}
+          {showToken && (
+            <p className='mt-2 text-sm text-gray-700 bg-gray-100 p-2 rounded z-10'>
+              {token || 'ERROR: 토큰이 없습니다.'}
+            </p>
+          )}
+        </div>
       </div>
     </>
   );

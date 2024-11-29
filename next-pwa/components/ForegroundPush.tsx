@@ -43,11 +43,11 @@ export default function ForegroundPush() {
             });
 
             // 브라우저 알림 표시 (선택적)
-            if (navigator.serviceWorker) {
-              navigator.serviceWorker.ready.then((registration) => {
-                registration.showNotification(title || "알림", { body });
-              });
-            }
+            // if (navigator.serviceWorker) {
+            //   navigator.serviceWorker.ready.then((registration) => {
+            //     registration.showNotification(title || "알림", { body });
+            //   });
+            // }
           }
         });
       }
