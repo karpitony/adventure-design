@@ -12,8 +12,8 @@ export async function GET() {
     const response = await fetch(URL, {
       method: "GET",
     });
+    console.log("응답 결과:", response);
     const data: ArduinoStatusResponse = await response.json();
-
     if (!response.ok || data.status === "error") {
       return NextResponse.json(
         { status: "error", message: data.message || "Arduino 상태를 가져오는 중 오류가 발생했습니다." },

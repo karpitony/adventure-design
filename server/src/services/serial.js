@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 let port = null;
 let arduinoStatus = 'DOWN';  // 기본 상태는 DOWN으로 설정
 let waterStatus = "WaterLow";  // 기본 상태는 WaterLow로 설정
+let isRequestInProgress = false;
 
 // 포트 탐색 후 자동 연결
 const connectArduino = () => {
@@ -57,6 +58,11 @@ const startReceivingData = () => {
 
   const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
   parser.on('data', (data) => {
+    if (isRequestInProgress) {
+      console.log('Waiting for status request to complete...');
+      return; // 요청이 진행 중일 때 데이터 수신을 무시
+    }
+
     console.log('Received from Arduino:', data);
 
     if (data.trim() === 'UP') {
@@ -67,22 +73,14 @@ const startReceivingData = () => {
       // 수위가 높아졌을 때, 알림을 보내는 코드
       arduinoStatus = 'UP';
       if (waterStatus === 'WaterHigh') return;
-      else {
-        waterStatus = 'WaterHigh';
-        fetch('http://localhost:8080/notifications/up', {
-          method: 'POST',
-        });
-      }
+      waterStatus = 'WaterHigh';
+      fetch('http://localhost:8080/notifications/up', { method: 'POST' });
     } else if (data.trim() === 'WaterLow') {
       // 수위가 낮아졌을 때, 알림을 보내는 코드
       arduinoStatus = 'DOWN';
       if (waterStatus === 'WaterLow') return;
-      else {
-        waterStatus = 'WaterLow';
-        fetch('http://localhost:8080/notifications/down', {
-          method: 'POST',
-        });
-      }
+      waterStatus = 'WaterLow';
+      fetch('http://localhost:8080/notifications/down', { method: 'POST' });
     }
   });
 
@@ -114,6 +112,8 @@ const requestArduinoStatus = () => {
       reject('Arduino port not open');
     }
 
+    isRequestInProgress = true; // 요청중 표시
+
     // 상태 요청 명령어 전송 (예: "STATUS")
     sendDataToArduino('STATUS');
 
@@ -124,13 +124,15 @@ const requestArduinoStatus = () => {
       } else if (data.trim() === 'DOWN') {
         arduinoStatus = 'DOWN';
       }
+      isRequestInProgress = false; // 요청 완료 표시
       resolve(arduinoStatus);
     });
 
-    // 타임아웃 설정, 2초 (응답이 없을 경우)
+    // 타임아웃 설정, 4초 (응답이 없을 경우)
     setTimeout(() => {
+      isRequestInProgress = false; // 요청 완료 표시
       reject('Timeout waiting for Arduino status.');
-    }, 2000);
+    }, 4000);
   });
 };
 

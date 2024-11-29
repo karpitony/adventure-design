@@ -12,6 +12,7 @@ export async function POST() {
     const response = await fetch(URL, {
       method: "POST",
     });
+    console.log("응답 결과:", response);
     const data: ArduinoCommandResponse = await response.json();
 
     if (!response.ok || data.status === "error") {
