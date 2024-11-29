@@ -44,7 +44,7 @@ async function sendNotification(message) {
           body: message,
         },
       });
-      console.log(`Successfully sent notification to ${token}`);
+      // console.log(`Successfully sent notification to ${token}`);
       successCount++;
     } catch (error) {
       console.error(`Failed to send notification to ${token}:`, error.message);

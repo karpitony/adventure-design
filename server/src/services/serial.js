@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 
 let port = null;
 let arduinoStatus = 'DOWN';  // 기본 상태는 DOWN으로 설정
+let waterStatus = "WaterLow";  // 기본 상태는 WaterLow로 설정
 
 // 포트 탐색 후 자동 연결
 const connectArduino = () => {
@@ -65,15 +66,23 @@ const startReceivingData = () => {
     } else if (data.trim() === 'WaterHigh') {
       // 수위가 높아졌을 때, 알림을 보내는 코드
       arduinoStatus = 'UP';
-      fetch('http://localhost:8080/notifications/up', {
-        method: 'POST',
-      });
+      if (waterStatus === 'WaterHigh') return;
+      else {
+        waterStatus = 'WaterHigh';
+        fetch('http://localhost:8080/notifications/up', {
+          method: 'POST',
+        });
+      }
     } else if (data.trim() === 'WaterLow') {
       // 수위가 낮아졌을 때, 알림을 보내는 코드
       arduinoStatus = 'DOWN';
-      fetch('http://localhost:8080/notifications/down', {
-        method: 'POST',
-      });
+      if (waterStatus === 'WaterLow') return;
+      else {
+        waterStatus = 'WaterLow';
+        fetch('http://localhost:8080/notifications/down', {
+          method: 'POST',
+        });
+      }
     }
   });
 
