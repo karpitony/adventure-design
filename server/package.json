@@ -19,6 +19,7 @@
     "express": "^4.21.1",
     "firebase-admin": "^13.0.1",
     "localtunnel": "^2.0.2",
+    "node-fetch": "^2.7.0",
     "serialport": "^12.0.0"
   }
 }
