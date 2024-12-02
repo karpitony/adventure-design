@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 const { sendDataToArduino, getArduinoStatus, isArduinoConnected } = require('../services/serial');
 
 // 아두이노 연결 상태 체크 함수
@@ -58,6 +59,9 @@ router.post('/up', async (req, res) => {
     // 현재 상태가 UP이 아닌 경우에도 명령 전송
     sendDataToArduino('UP');
 
+    // 명령으로 올렸을 때도 알림 보내기
+    fetch('http://localhost:8080/notifications/up', { method: 'POST' });
+
     // 즉시 성공 응답 반환
     res.status(200).json({
       status: "success",
@@ -89,6 +93,9 @@ router.post('/down', async (req, res) => {
 
     // 현재 상태가 DOWN이 아닌 경우에도 명령 전송
     sendDataToArduino('DOWN');
+
+    // 명령으로 올렸을 때도 알림 보내기
+    fetch('http://localhost:8080/notifications/down', { method: 'POST' });
 
     // 즉시 성공 응답 반환
     res.status(200).json({
